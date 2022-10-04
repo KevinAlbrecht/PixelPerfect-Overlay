@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/tauri";
-import { FileEntry, readDir, readBinaryFile } from "@tauri-apps/api/fs";
+import { useState } from "react";
+import { readDir } from "@tauri-apps/api/fs";
 import { open } from "@tauri-apps/api/dialog";
 
+import { invokeOpenOverlay, invokeReadFileAsb64 } from "./interop";
 import "./App.css";
-import { format } from "path";
 
 function App() {
   const [currentPath, setCurrentPath] = useState<string>("");
@@ -18,12 +16,17 @@ function App() {
         title: "Open assets folder",
       });
 
-      if (!path || typeof path === typeof Array)
-        throw new Error("wrong folder");
+      if (!path || typeof path === typeof Array) {
+        console.warn("chosen folder was empty or multiple");
+        return;
+      }
 
+      const safePath: string = path as string;
+
+      setCurrentPath(safePath);
       setImages([]);
-      setCurrentPath(path as string);
-      const fileEntries = await readDir(currentPath);
+
+      const fileEntries = await readDir(safePath);
 
       for (const entry of fileEntries) {
         if (!entry.name) continue;
@@ -31,13 +34,17 @@ function App() {
         const sp = entry.name.split(".");
         var last = sp[sp.length - 1];
         if (["jpg", "jpeg", "png"].includes(last)) {
-          const b64 = await readFileAsb64(entry.path);
+          const b64 = await invokeReadFileAsb64(entry.path);
           setImages((arr) => [...arr, b64]);
         }
       }
     } catch (e) {
       console.error(e);
     }
+  }
+
+  async function openOverlay() {
+    await invokeOpenOverlay();
   }
 
   return (
@@ -52,7 +59,7 @@ function App() {
         <button onClick={() => openFolder()}>Open folder</button>
         <ul className="grid">
           {images.map((e, i) => (
-            <li key={i}>
+            <li key={i} onClick={openOverlay}>
               <img src={`data:image/png;base64,${e}`} />
             </li>
           ))}
@@ -63,6 +70,3 @@ function App() {
 }
 
 export default App;
-
-const readFileAsb64 = async (path: string): Promise<string> =>
-  invoke("read_file", { path });

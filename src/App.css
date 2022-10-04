@@ -1,7 +1,31 @@
-.logo.vite:hover {
-  filter: drop-shadow(0 0 2em #747bff);
+div.grid-wrapper {
+  width: 100%;
 }
 
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafb);
+ul.grid {
+  --width: 100x;
+  --height: 160px;
+
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+ul.grid li {
+  line-height: var(--height);
+  height: var(--height);
+  width: var(--width);
+  border: solid 1px black;
+  cursor: pointer;
+}
+ul.grid li:hover {
+  /* filter: drop-shadow(0 0 0.7em #747bff); */
+  border-color: rgba(255, 255, 255, 0.514);
+}
+
+ul.grid li img {
+  max-height: var(--height);
+  max-width: var(--width);
+  vertical-align: middle;
 }

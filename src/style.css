@@ -100,29 +100,3 @@ button {
     background-color: #0f0f0f98;
   }
 }
-
-div.grid-wrapper {
-  width: 100%;
-}
-
-ul.grid {
-  --width: 100x;
-  --height: 160px;
-
-  list-style-type: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-ul.grid li {
-  line-height: var(--height);
-  height: var(--height);
-  width: var(--width);
-  border: solid 1px black;
-}
-ul.grid li img {
-  max-height: var(--height);
-  max-width: var(--width);
-  vertical-align: middle;
-}
