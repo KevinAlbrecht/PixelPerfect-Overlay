@@ -2,7 +2,7 @@
 mod utils;
 
 #[tauri::command]
-pub fn read_file(path: String) -> String {
+pub async fn read_file(path: String) -> String {
     match std::fs::read(path) {
         Ok(bytes) => utils::get_b64_from_uint8(bytes),
         Err(e) => {
@@ -13,6 +13,6 @@ pub fn read_file(path: String) -> String {
 }
 
 #[tauri::command]
-pub fn open_overlay(handle: tauri::AppHandle) {
+pub async fn open_overlay(handle: tauri::AppHandle) {
     utils::create_window(handle)
 }

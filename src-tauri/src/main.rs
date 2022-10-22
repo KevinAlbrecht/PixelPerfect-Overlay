@@ -9,7 +9,7 @@ fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             commands::read_file,
-            commands::open_overlay
+            commands::open_overlay,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
