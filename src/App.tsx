@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/tauri";
-import { FileEntry, readDir, readBinaryFile } from "@tauri-apps/api/fs";
+import { useState } from "react";
+import { readDir } from "@tauri-apps/api/fs";
 import { open } from "@tauri-apps/api/dialog";
 
+import { invokeOpenOverlay, invokeReadFileAsb64 } from "./interop";
+import { getFileExtention, isAcceptableFiletype } from "./utils";
 import "./App.css";
-import { format } from "path";
+import { sendDisplayImg } from "./services/window.service";
 
 function App() {
   const [currentPath, setCurrentPath] = useState<string>("");
@@ -18,32 +18,41 @@ function App() {
         title: "Open assets folder",
       });
 
-      if (!path || typeof path === typeof Array)
-        throw new Error("wrong folder");
+      if (!path || Array.isArray(path)) {
+        console.warn("chosen folder was empty or multiple");
+        return;
+      }
 
-      setImages([]);
-      setCurrentPath(path as string);
-      const fileEntries = await readDir(currentPath);
+      setCurrentPath(path);
+      const fileEntries = await readDir(path);
+
+      const imagesToSet: string[] = [];
 
       for (const entry of fileEntries) {
         if (!entry.name) continue;
 
-        const sp = entry.name.split(".");
-        var last = sp[sp.length - 1];
-        if (["jpg", "jpeg", "png"].includes(last)) {
-          const b64 = await readFileAsb64(entry.path);
-          setImages((arr) => [...arr, b64]);
+        const entryFiletype = getFileExtention(entry.name);
+
+        if (entryFiletype && isAcceptableFiletype(entryFiletype)) {
+          const b64 = await invokeReadFileAsb64(entry.path);
+          imagesToSet.push(b64);
         }
       }
+
+      setImages(imagesToSet);
     } catch (e) {
       console.error(e);
     }
   }
 
+  async function openOverlay(index: number) {
+    await invokeOpenOverlay();
+    sendDisplayImg(`data:image/png;base64,${images[index]}`);
+  }
+
   return (
     <div className="container">
       <h1>Welcome to Tauri!</h1>
-
       <div className="row">
         <span>{currentPath}</span>
       </div>
@@ -52,7 +61,7 @@ function App() {
         <button onClick={() => openFolder()}>Open folder</button>
         <ul className="grid">
           {images.map((e, i) => (
-            <li key={i}>
+            <li key={i} onClick={() => openOverlay(i)}>
               <img src={`data:image/png;base64,${e}`} />
             </li>
           ))}
@@ -63,6 +72,3 @@ function App() {
 }
 
 export default App;
-
-const readFileAsb64 = async (path: string): Promise<string> =>
-  invoke("read_file", { path });
