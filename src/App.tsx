@@ -6,10 +6,16 @@ import { invokeOpenOverlay, invokeReadFileAsb64 } from "./interop";
 import { getFileExtention, isAcceptableFiletype } from "./utils";
 import "./App.css";
 import { listenToPageLoaded } from "./services/window.service";
+import { ImageFile } from "./models";
+
+async function openOverlay(e: ImageFile) {
+  await invokeOpenOverlay();
+  await listenToPageLoaded(e);
+}
 
 function App() {
   const [currentPath, setCurrentPath] = useState<string>("");
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<ImageFile[]>([]);
 
   async function openFolder() {
     try {
@@ -26,7 +32,7 @@ function App() {
       setCurrentPath(path);
       const fileEntries = await readDir(path);
 
-      const imagesToSet: string[] = [];
+      const imagesToSet: ImageFile[] = [];
 
       for (const entry of fileEntries) {
         if (!entry.name) continue;
@@ -35,7 +41,13 @@ function App() {
 
         if (entryFiletype && isAcceptableFiletype(entryFiletype)) {
           const b64 = await invokeReadFileAsb64(entry.path);
-          imagesToSet.push(b64);
+          const imgFile: ImageFile = {
+            b64,
+            name: entry.name,
+            width: 100,
+            height: 100,
+          };
+          imagesToSet.push(imgFile);
         }
       }
 
@@ -43,11 +55,6 @@ function App() {
     } catch (e) {
       console.error(e);
     }
-  }
-
-  async function openOverlay(index: number) {
-    await invokeOpenOverlay();
-    await listenToPageLoaded(`data:image/png;base64,${images[index]}`)
   }
 
   return (
@@ -61,8 +68,8 @@ function App() {
         <button onClick={() => openFolder()}>Open folder</button>
         <ul className="grid">
           {images.map((e, i) => (
-            <li key={i} onClick={() => openOverlay(i)}>
-              <img src={`data:image/png;base64,${e}`} />
+            <li key={i} onClick={() => openOverlay(e)}>
+              <img src={`data:image/png;base64,${e.b64}`} />
             </li>
           ))}
         </ul>

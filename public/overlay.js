@@ -18,17 +18,17 @@ function updateRange(e) {
   contentsEl.style["opacity"] = e.target.value / 100;
 }
 
-function onReceiveB64(receivedEvent) {
-  contentMainImgEl["src"] = receivedEvent.payload;
+function onReceiveImage(receivedEvent) {
+  const payload = JSON.parse(receivedEvent.payload);
+  contentMainImgEl["src"] = `data:image/png;base64,${payload.b64}`;
 }
 
 function notifyPageLoaded() {
   emit(PAGE_LOADED_EVENT, { isLoaded: true });
-  console.log("notified");
 }
 
 await (async function init() {
   addDomEvents();
-  await once(DISPLAY_IMG_EVENT, onReceiveB64);
+  await once(DISPLAY_IMG_EVENT, onReceiveImage);
   notifyPageLoaded();
 })();
