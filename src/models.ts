@@ -5,3 +5,10 @@ type FileItem = {
   extension: string;
   path: string;
 };
+
+export type ImageFile = {
+  b64: string;
+  name: string;
+  width: number;
+  height: number;
+};
