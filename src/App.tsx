@@ -3,7 +3,7 @@ import { readDir } from "@tauri-apps/api/fs";
 import { open } from "@tauri-apps/api/dialog";
 
 import { invokeOpenOverlay, invokeReadFileAsb64 } from "./interop";
-import { getFileExtention, isAcceptableFiletype } from "./utils";
+import { addB64Prefix, getFileExtention, isAcceptableFiletype } from "./utils";
 import "./App.css";
 import { listenToPageLoaded } from "./services/window.service";
 import { ImageFile } from "./models";
@@ -41,13 +41,18 @@ function App() {
 
         if (entryFiletype && isAcceptableFiletype(entryFiletype)) {
           const b64 = await invokeReadFileAsb64(entry.path);
-          const imgFile: ImageFile = {
-            b64,
-            name: entry.name,
-            width: 100,
-            height: 100,
+          const img = new Image();
+          img.onload = () => {
+            const { width, height } = img;
+            const imgFile: ImageFile = {
+              b64,
+              name: entry.name!,
+              width,
+              height,
+            };
+            imagesToSet.push(imgFile);
           };
-          imagesToSet.push(imgFile);
+          img.src = addB64Prefix(b64);
         }
       }
 
@@ -59,7 +64,6 @@ function App() {
 
   return (
     <div className="container">
-      <h1>Welcome to Tauri!</h1>
       <div className="row">
         <span>{currentPath}</span>
       </div>

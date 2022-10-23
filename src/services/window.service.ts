@@ -1,5 +1,5 @@
 import { WebviewWindow } from "@tauri-apps/api/window";
-import { invokeOpenOverlay } from "../interop";
+import { invokeOpenOverlay, invokeResizeWindow } from "../interop";
 import { ImageFile } from "../models";
 
 const overlayWindowId = "overlay";
@@ -37,6 +37,7 @@ export const listenToPageLoaded = async (image: ImageFile) => {
     async () => {
 
       await overlayWindow.emit(OverlayEvent.DisplayImg, image);
+      await invokeResizeWindow(image.width,image.height);
     }
   );
 };
