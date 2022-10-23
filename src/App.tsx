@@ -5,7 +5,7 @@ import { open } from "@tauri-apps/api/dialog";
 import { invokeOpenOverlay, invokeReadFileAsb64 } from "./interop";
 import { getFileExtention, isAcceptableFiletype } from "./utils";
 import "./App.css";
-import { sendDisplayImg } from "./services/window.service";
+import { listenToPageLoaded } from "./services/window.service";
 
 function App() {
   const [currentPath, setCurrentPath] = useState<string>("");
@@ -47,7 +47,7 @@ function App() {
 
   async function openOverlay(index: number) {
     await invokeOpenOverlay();
-    sendDisplayImg(`data:image/png;base64,${images[index]}`);
+    await listenToPageLoaded(`data:image/png;base64,${images[index]}`)
   }
 
   return (
