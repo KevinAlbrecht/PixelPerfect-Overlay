@@ -1,4 +1,4 @@
-import { once, emit } from "/node_modules/@tauri-apps/api/event";
+import { listen, emit } from "/node_modules/@tauri-apps/api/event";
 
 const PAGE_LOADED_EVENT = "PageLoaded";
 const DISPLAY_IMG_EVENT = "DisplayImg";
@@ -29,6 +29,6 @@ function notifyPageLoaded() {
 
 await (async function init() {
   addDomEvents();
-  await once(DISPLAY_IMG_EVENT, onReceiveImage);
+  await listen(DISPLAY_IMG_EVENT, onReceiveImage);
   notifyPageLoaded();
 })();

@@ -1,21 +1,14 @@
 import { WebviewWindow } from "@tauri-apps/api/window";
-import { invokeOpenOverlay, invokeResizeWindow } from "../interop";
+import {
+  getOverlayWindow,
+  invokeOpenOverlay,
+  invokeResizeWindow,
+} from "../interop";
 import { ImageFile } from "../models";
-
-const overlayWindowId = "overlay";
 
 enum OverlayEvent {
   DisplayImg = "DisplayImg",
   PageLoaded = "PageLoaded",
-}
-
-const getOverlayWindow = () => WebviewWindow.getByLabel(overlayWindowId);
-
-let currentUnlistenFn:Function;
-
-export async function openOverlay(image: ImageFile) {
-  await invokeOpenOverlay();
-  await listenToPageLoaded(image)
 }
 
 export const sendDisplayImg = async (b64: string) => {
@@ -25,19 +18,28 @@ export const sendDisplayImg = async (b64: string) => {
   await overlayWindow.emit(OverlayEvent.DisplayImg, b64);
 };
 
-export const listenToPageLoaded = async (image: ImageFile) => {
-
+export const listenToPageLoaded = async (
+  image: ImageFile,
+  isAlreadyListening = false
+) => {
   const overlayWindow = getOverlayWindow();
   if (!overlayWindow) return;
 
-  if (currentUnlistenFn) currentUnlistenFn();
+  if(isAlreadyListening){
+    emitDisplayImage(overlayWindow,image);
+    return;
+  }
 
-  currentUnlistenFn = await overlayWindow.once(
+  await overlayWindow.once(
     OverlayEvent.PageLoaded,
-    async () => {
-
-      await overlayWindow.emit(OverlayEvent.DisplayImg, image);
-      await invokeResizeWindow(image.width,image.height);
-    }
+    async () => emitDisplayImage(overlayWindow,image)
   );
+};
+
+const emitDisplayImage = async (
+  window: WebviewWindow,
+  image: ImageFile
+) => {
+  await window.emit(OverlayEvent.DisplayImg, image);
+  await invokeResizeWindow(image.width, image.height);
 };

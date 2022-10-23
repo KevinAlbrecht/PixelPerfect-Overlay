@@ -9,8 +9,8 @@ import { listenToPageLoaded } from "./services/window.service";
 import { ImageFile } from "./models";
 
 async function openOverlay(e: ImageFile) {
-  await invokeOpenOverlay();
-  await listenToPageLoaded(e);
+  const isWindowAlreadyDisplayed = await invokeOpenOverlay();
+  await listenToPageLoaded(e,isWindowAlreadyDisplayed);
 }
 
 function App() {
