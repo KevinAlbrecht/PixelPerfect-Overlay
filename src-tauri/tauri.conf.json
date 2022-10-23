@@ -17,6 +17,9 @@
       "fs": {
        "all":true,
        "scope": ["**"]
+      },
+      "window":{
+        "all":true
       }
     },
     "bundle": {

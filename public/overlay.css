@@ -1,0 +1,26 @@
+* {
+  background-color: transparent;
+}
+
+body {
+  margin: 0;
+}
+
+:root {
+  --tb-height: 30px;
+}
+
+#toolbar {
+  height: var(--tb-height);
+  background-color: darkslategrey;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#contents {
+  margin-top: var(--tb-height);
+  opacity: 1;
+}

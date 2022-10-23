@@ -4,10 +4,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Overlay</title>
-    <script type="module" src="./overlay.js"></script>
+    <link rel="stylesheet" href="./overlay.css" />
   </head>
   <body>
-    <h1 id="title"></h1>
-    <img id="main-image" />
+    <div id="toolbar">
+      <div>
+        <input id="opacity-input" type="range" min="0" max="100" value="100" step="1" />
+        <span id="opacity-value"></span>
+      </div>
+    </div>
+    <div id="contents">
+      <img id="main-image" />
+    </div>
+    <script type="module" src="./overlay.js"></script>
   </body>
 </html>
