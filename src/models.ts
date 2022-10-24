@@ -6,9 +6,15 @@ type FileItem = {
   path: string;
 };
 
+export enum ImageFileType {
+  B64 = "B64",
+  ObjectUrl = "ObjectUrl",
+}
+
 export type ImageFile = {
-  b64: string;
+  source: string;
   name: string;
   width: number;
   height: number;
+  sourceType: ImageFileType;
 };
