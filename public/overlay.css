@@ -31,4 +31,5 @@ body {
 #contents {
   margin-top: var(--tb-height);
   opacity: 1;
+  text-align: center;
 }
