@@ -3,6 +3,10 @@ import { listen, emit } from "/node_modules/@tauri-apps/api/event";
 const PAGE_LOADED_EVENT = "PageLoaded";
 const DISPLAY_IMG_EVENT = "DisplayImg";
 
+const B64_IMAGE_FILE_TYPE = "B64";
+const B64_PREFIX = "data:image/png;base64, ";
+
+
 const opacityValueEl = document.querySelector("span#opacity-value");
 const contentsEl = document.querySelector("#contents");
 const contentMainImgEl = document.querySelector("img#main-image");
@@ -20,7 +24,7 @@ function updateRange(e) {
 
 function onReceiveImage(receivedEvent) {
   const payload = JSON.parse(receivedEvent.payload);
-  contentMainImgEl["src"] = `data:image/png;base64,${payload.b64}`;
+  contentMainImgEl["src"] = `${payload.sourceType === B64_IMAGE_FILE_TYPE?B64_PREFIX:''}${payload.source}`;
 }
 
 function notifyPageLoaded() {
