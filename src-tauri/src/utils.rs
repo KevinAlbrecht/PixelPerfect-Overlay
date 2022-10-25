@@ -15,14 +15,11 @@ pub fn create_window(handle: tauri::AppHandle) {
         tauri::WindowUrl::App("overlay.html".into()),
     )
     .transparent(true)
-    .inner_size(0.0, 0.0)
-    // .visible(false)
+      // Workaround: when the window appears, even if the bg should be transparent, it s not.
+    // a white print is visible but disappears when resizing, so resizing at init remove this white print.
+    .inner_size(1.0, 1.0)
     .build()
     .unwrap();
-
-    // Workaround: when the window appears, even if the bg should be transparent, it s not.
-    // a white print is visible but disappears when resizing, so resizing at init remove this white print.
-    resize_window(window, 500.0, 500.0);
 }
 
 pub fn resize_window(window: Window, width: f64, height: f64) {
