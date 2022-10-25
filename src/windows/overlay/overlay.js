@@ -31,7 +31,7 @@ function notifyPageLoaded() {
   emit(PAGE_LOADED_EVENT, { isLoaded: true });
 }
 
-await (async function init() {
+(async function init() {
   addDomEvents();
   await listen(DISPLAY_IMG_EVENT, onReceiveImage);
   notifyPageLoaded();
