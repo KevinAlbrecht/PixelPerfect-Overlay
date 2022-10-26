@@ -1,35 +1,76 @@
-:root {
-  --tb-height: 30px;
-}
-
 * {
   background-color: transparent;
+  user-select: none;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: meiryo;
 }
 
 input {
   outline: none;
 }
 
-body {
-  margin: 0;
-}
-
-#toolbar {
-  height: var(--tb-height);
-  background-color: darkslategrey;
-  color: white;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  width: 100%;
+div[data-tauri-drag-region] {
+  position: absolute;
   top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 10;
 }
 
+#toolbar {
+  position: absolute;
+  height: 40px;
+  width: 240px;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 5px;
+  background-color: #555;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 20;
+  visibility: hidden;
+}
+
+body:hover #toolbar {
+  visibility: visible;
+}
+
+#opacity-input {
+  width: 80px;
+  cursor: pointer;
+}
+
+#size-input {
+  width: 80px;
+  line-height: 100%;
+  font-size: 12px;
+}
+
+#size-input .size-input-button {
+  font-size: 15px;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  text-align: center;
+  line-height: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#titlebar-close {
+  cursor: pointer;
+}
+
 #contents {
-  margin-top: var(--tb-height);
   opacity: 1;
   text-align: center;
 }

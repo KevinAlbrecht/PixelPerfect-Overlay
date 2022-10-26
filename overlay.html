@@ -7,11 +7,24 @@
     <link rel="stylesheet" href="/src/windows/overlay/overlay.css" />
   </head>
   <body>
+    <div data-tauri-drag-region></div>
     <div id="toolbar">
-      <div>
-        <input id="opacity-input" type="range" min="0" max="100" value="100" step="1" />
-        <span id="opacity-value"></span>
+      <div id="size-input">
+        <span class="size-input-button" data-value="10">+</span>
+        <span id="size-value">100%</span>
+        <span class="size-input-button" data-value="-10">-</span>
       </div>
+        <input
+          id="opacity-input"
+          type="range"
+          min="10"
+          max="100"
+          value="100"
+          step="1"
+        />
+        <div id="titlebar-close">
+          <span>x</span>
+         </div>
     </div>
     <div id="contents">
       <img id="main-image" />
