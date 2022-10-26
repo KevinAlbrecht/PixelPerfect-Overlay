@@ -3,6 +3,7 @@
 Works on Windows & macOs
 
 ### Done
+- [x] Browse directories
 - [x] Support "binary" img files (pnj jpeg...)
 - [x] Support unique file from clipboard
 - [x] Zoom feature
