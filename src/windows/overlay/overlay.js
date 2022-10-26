@@ -8,7 +8,6 @@ const DISPLAY_IMG_EVENT = "DisplayImg";
 const B64_IMAGE_FILE_TYPE = "B64";
 const B64_PREFIX = "data:image/png;base64, ";
 
-const opacityValueEl = document.querySelector("span#opacity-value");
 const sizeValueEl = document.querySelector("span#size-value");
 const contentsEl = document.querySelector("#contents");
 const contentMainImgEl = document.querySelector("img#main-image");
@@ -27,7 +26,6 @@ function addDomEvents() {
 }
 
 function updateRange(e) {
-  opacityValueEl.innerText = e.target.value + "%";
   contentsEl.style["opacity"] = e.target.value / 100;
 }
 

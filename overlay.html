@@ -9,25 +9,22 @@
   <body>
     <div data-tauri-drag-region></div>
     <div id="toolbar">
-      <div id="titlebar-close">
-        <img src="https://api.iconify.design/mdi:close.svg" alt="close" />
-      </div>
       <div id="size-input">
-        <div class="size-input-button" data-value="10">+</div>
+        <span class="size-input-button" data-value="10">+</span>
         <span id="size-value">100%</span>
-        <div class="size-input-button" data-value="-10">-</div>
+        <span class="size-input-button" data-value="-10">-</span>
       </div>
-      <div>
         <input
           id="opacity-input"
           type="range"
-          min="0"
+          min="10"
           max="100"
           value="100"
           step="1"
         />
-        <span id="opacity-value">100%</span>
-      </div>
+        <div id="titlebar-close">
+          <span>x</span>
+         </div>
     </div>
     <div id="contents">
       <img id="main-image" />
