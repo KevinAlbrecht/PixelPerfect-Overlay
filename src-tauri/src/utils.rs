@@ -20,7 +20,8 @@ pub fn create_window(handle: tauri::AppHandle) {
     .resizable(false)
     // Workaround: when the window appears, even if the bg should be transparent, it s not.
     // a white print is visible but disappears when resizing, so resizing at init remove this white print.
-    .inner_size(1.0, 1.0)
+    // Memo: 0 sized window works on windows but no macos , 10.0 seems good enough
+    .inner_size(10.0, 10.0)
     .build()
     .unwrap();
 }

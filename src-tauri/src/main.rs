@@ -17,10 +17,11 @@ struct ResizeWindowPayload {
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
-            let handle =  app.handle();
-            app.listen_global("ResizeWindow",  move|event| {
-                let payload : ResizeWindowPayload = serde_json::from_str(event.payload().unwrap()).unwrap();
-                utils::resize_window(  handle.clone(), payload.width as f64, payload.height as f64);
+            let handle = app.handle();
+            app.listen_global("ResizeWindow", move |event| {
+                let payload: ResizeWindowPayload =
+                    serde_json::from_str(event.payload().unwrap()).unwrap();
+                utils::resize_window(handle.clone(), payload.width, payload.height);
             });
             Ok(())
         })
