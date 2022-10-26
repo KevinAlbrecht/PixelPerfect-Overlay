@@ -4,6 +4,7 @@
 
 * {
   background-color: transparent;
+  user-select: none;
 }
 
 input {
@@ -12,6 +13,14 @@ input {
 
 body {
   margin: 0;
+}
+div[data-tauri-drag-region]{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
 }
 
 #toolbar {
@@ -25,7 +34,7 @@ body {
   position: fixed;
   width: 100%;
   top: 0;
-  z-index: 10;
+  z-index: 20;
 }
 
 #contents {
