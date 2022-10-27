@@ -5,7 +5,7 @@ mod utils;
 #[tauri::command]
 pub async fn read_file(path: String) -> String {
     match std::fs::read(path) {
-        Ok(bytes) => utils::get_b64_from_uint8(bytes),
+        Ok(bytes) => utils::get_b64_from_vector(bytes),
         Err(e) => {
             println!("read_file failed {e}");
             panic!("read_file failed{}", e)

@@ -1,11 +1,10 @@
-use base64;
 use std::str;
-use tauri::{LogicalSize, Size};
-use tauri::Manager;
+use tauri::{LogicalSize, Size,Manager};
+use base64;
 
 pub const OVERLAY_LABEL: &str = "overlay";
 
-pub fn get_b64_from_uint8(buffer: Vec<u8>) -> String {
+pub fn get_b64_from_vector(buffer: Vec<u8>) -> String {
     return base64::encode(buffer);
 }
 
