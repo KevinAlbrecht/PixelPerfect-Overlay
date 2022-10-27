@@ -3,6 +3,7 @@ import { appWindow } from "@tauri-apps/api/window";
 
 const PAGE_LOADED_EVENT = "PageLoaded";
 const RESIZE_WINDOW_EVENT = "ResizeWindow";
+const MOVE_WINDOW_EVENT = "MoveWindow";
 const DISPLAY_IMG_EVENT = "DisplayImg";
 
 const B64_IMAGE_FILE_TYPE = "B64";
@@ -15,6 +16,7 @@ const contentMainImgEl = document.querySelector("img#main-image");
 let originalWidth;
 let resizeRatio = 100;
 
+// DOM Events
 function addDomEvents() {
   document
     .querySelector("input#opacity-input")
@@ -23,6 +25,27 @@ function addDomEvents() {
   document
     .querySelector("#titlebar-close")
     .addEventListener("click", appWindow.close);
+
+    // TODO: Handle keydown from rust side would be great ...
+    document.addEventListener("keydown",handleArrowKeys)
+}
+
+function handleArrowKeys(e){
+    switch (e.keyCode) {
+       case 37:
+        emitMoveWindow(0);//left
+          break;
+       case 38:
+        emitMoveWindow(1);//up
+          break;
+       case 39:
+        emitMoveWindow(2);//right
+          break;
+       case 40:
+        emitMoveWindow(3);//down
+          break;
+    }
+
 }
 
 function updateRange(e) {
@@ -53,12 +76,18 @@ function onReceiveImage(receivedEvent) {
   originalWidth = payload.width;
 }
 
+
+// Backend Events
 async function emitPageLoaded() {
   await emit(PAGE_LOADED_EVENT, { isLoaded: true });
 }
 
 async function emitResizeWindow(width, height) {
   await emit(RESIZE_WINDOW_EVENT, { width, height });
+}
+
+async function emitMoveWindow(evtId){
+  await emit(MOVE_WINDOW_EVENT, { evtId });
 }
 
 (async function init() {
